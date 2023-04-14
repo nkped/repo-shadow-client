@@ -1,9 +1,14 @@
 import './App.css';
+import Header from './components/Header';
+import SubHeader from './components/SubHeader';
+
+
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello from react</h1>
+      <Header />
+      <SubHeader />
     </div>
   );
 }
