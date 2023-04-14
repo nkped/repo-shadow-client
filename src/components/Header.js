@@ -2,9 +2,10 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <div>
-        <h1>W.O.D</h1>        
-    </div>
+    <header>
+        <h1>W.O.D</h1>
+        <h3>Workout of the day</h3>
+    </header>
   )
 }
 
