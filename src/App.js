@@ -1,6 +1,7 @@
 import './App.css';
 import Header from './components/Header';
 import Content from './components/Content';
+import AddItem from './components/AddItem';
 
 import { useState } from 'react';
 
@@ -11,6 +12,8 @@ const [ items, setItems ] = useState([
   { id: 2, checked: false, item: 'squats' },
   { id: 3, checked: false, item: 'sit ups' }
 ])
+
+const [ newItem, setNewItem ] = useState('')
 
 const handleCheck = (id) => {
   const listItems = items.map((item) => item.id === id ? { ...item, checked: !item.checked }: item )
@@ -25,11 +28,14 @@ const handleDelete = (id) => {
   return (
     <div className="App">
       <Header />
+      <AddItem 
+        newItem={newItem} 
+        setNewItem={setNewItem}  />
       <Content 
-      items={items} 
-      setItems={setItems} 
-      handleCheck={handleCheck} 
-      handleDelete={handleDelete}/>
+        items={items} 
+        setItems={setItems} 
+        handleCheck={handleCheck} 
+        handleDelete={handleDelete}/>
     </div>
   );
 }
