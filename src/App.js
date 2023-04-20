@@ -1,19 +1,19 @@
 import './App.css';
 import Header from './components/Header';
-import Content from './components/Content';
 import AddItem from './components/AddItem';
+import SearchItem from './components/SearchItem';
+import Content from './components/Content';
 
 import { useState } from 'react';
 
 function App() {
 
-const [ items, setItems ] = useState([
-  { id: 1, checked: true, item: 'push ups' },
-  { id: 2, checked: false, item: 'squats' },
-  { id: 3, checked: false, item: 'sit ups' }
-])
+const [ items, setItems ] = useState([{ id: 1, checked: false, item: 'sit-up'}])
+
 
 const [ newItem, setNewItem ] = useState('')
+
+const [ search, setSearch ] = useState('')
 
 const addItem = (item) => {
   const id = items.length ? items[items.length -1].id + 1 : 1
@@ -47,9 +47,12 @@ const handleSubmit = (e) => {
         setNewItem={setNewItem} 
         handleSubmit={handleSubmit}
          />
+      <SearchItem 
+        search={search} 
+        setSearch={setSearch} 
+      />
       <Content 
-        items={items} 
-        setItems={setItems} 
+        items={items.filter((item) => (item.item).toLowerCase().includes(search.toLowerCase()))} 
         handleCheck={handleCheck} 
         handleDelete={handleDelete}/>
     </div>
