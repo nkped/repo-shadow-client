@@ -15,11 +15,14 @@ const [ newItem, setNewItem ] = useState('')
 
 const [ search, setSearch ] = useState('')
 
+
+
 const addItem = (item) => {
   const id = items.length ? items[items.length -1].id + 1 : 1
   const myNewItem = { id, checked: false, item}
   const listItems = [ ...items, myNewItem] 
   setItems(listItems)
+  localStorage.setItem('workoutlist', JSON.stringify(listItems))
 }
 
 const handleCheck = (id) => {
