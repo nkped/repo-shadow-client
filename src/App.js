@@ -12,11 +12,10 @@ const [ items, setItems ] = useState([])
 const [ newItem, setNewItem ] = useState('')
 const [ search, setSearch ] = useState('')
 const [ fetchError, setFetchError ] = useState(null)
-
-const DATA_URL = 'http://localhost:3500/item'
-
+const [ isLoading, setIsloading ] = useState(true)
 
 
+const DATA_URL = 'http://localhost:3500/items'
 
 const setAndSave = (newItems) => {
   setItems(newItems)
@@ -52,16 +51,18 @@ useEffect(() => {
   const fetchItems = async () => {
     try {
       const response = await fetch(DATA_URL)
-      if (!response.ok) throw new Error('Did not fetch items from json server')
+      if (!response.ok) throw new Error('Could not fetch items from json server')
       const listItems = await response.json()
-      console.log(listItems)
       setItems(listItems)
       setFetchError(null)
     } catch(err) {
       setFetchError(err.message)
-    }
+    }finally {
+      setIsloading(false)
+    }    
   }
-(async () => await fetchItems())()}
+  setTimeout(() => (async () => await fetchItems())(), 2000)
+}
 , [])
 
 return (
@@ -77,7 +78,8 @@ return (
         setSearch={setSearch} 
         />
       <main>
-        {fetchError && <p style={{color: 'red', margin: '10px'}}>{`Error: ${fetchError}`}</p>}
+        {isLoading && <p>Loading items...</p>}
+        {fetchError && !isLoading && <p style={{color: 'red', margin: '10px'}}>{`Error: ${fetchError}`}</p>}
         <Content 
           items={items.filter((item) => (item.item).toLowerCase().includes(search.toLowerCase()))} 
           handleCheck={handleCheck} 
