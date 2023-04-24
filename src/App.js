@@ -10,7 +10,6 @@ function App() {
 
 const [ items, setItems ] = useState(JSON.parse(localStorage.getItem('workoutlist')))
 
-
 const [ newItem, setNewItem ] = useState('')
 
 const [ search, setSearch ] = useState('')
