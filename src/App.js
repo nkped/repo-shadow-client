@@ -3,6 +3,7 @@ import Header from './components/Header';
 import AddItem from './components/AddItem';
 import SearchItem from './components/SearchItem';
 import Content from './components/Content';
+import apiRequest from './apiRequest';
 
 import { useState, useEffect } from 'react';
 
@@ -14,29 +15,35 @@ const [ search, setSearch ] = useState('')
 const [ fetchError, setFetchError ] = useState(null)
 const [ isLoading, setIsloading ] = useState(true)
 
+const API_URL = 'http://localhost:3500/items'
 
-const DATA_URL = 'http://localhost:3500/items'
-
-const setAndSave = (newItems) => {
-  setItems(newItems)
-  localStorage.setItem('workoutlist', JSON.stringify(newItems))
-}
-
-const addItem = (item) => {
+const addItem = async (item) => {
   const id = items.length ? items[items.length -1].id + 1 : 1
   const myNewItem = { id, checked: false, item}
   const listItems = [ ...items, myNewItem] 
-  setAndSave(listItems)
+  setItems(listItems)
+
+  const postOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(myNewItem)
+  }
+
+  const result = await apiRequest(API_URL, postOptions)
+  
+  if (result) setFetchError(result)
 }
 
 const handleCheck = (id) => {
   const listItems = items.map((item) => item.id === id ? { ...item, checked: !item.checked }: item )
-  setAndSave(listItems)
+  setItems(listItems)
 }
 
 const handleDelete = (id) => {
   const listItems = items.filter((item) => item.id !== id)
-  setAndSave(listItems)
+  setItems(listItems)
 }
 
 const handleSubmit = (e) => {
@@ -50,7 +57,7 @@ const handleSubmit = (e) => {
 useEffect(() => {
   const fetchItems = async () => {
     try {
-      const response = await fetch(DATA_URL)
+      const response = await fetch(API_URL)
       if (!response.ok) throw new Error('Could not fetch items from json server')
       const listItems = await response.json()
       setItems(listItems)
