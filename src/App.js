@@ -22,7 +22,7 @@ const addItem = async (item) => {
   const myNewItem = { id, checked: false, item}
   const listItems = [ ...items, myNewItem] 
   setItems(listItems)
-
+//code below updates api
   const postOptions = {
     method: 'POST',
     headers: {
@@ -36,9 +36,25 @@ const addItem = async (item) => {
   if (result) setFetchError(result)
 }
 
-const handleCheck = (id) => {
+const handleCheck = async (id) => {
   const listItems = items.map((item) => item.id === id ? { ...item, checked: !item.checked }: item )
   setItems(listItems)
+
+  const myItem = listItems.filter((item) => item.id === id)
+
+  const reqURL = `${API_URL}/${id}` 
+
+  const updateOptions = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({checked: myItem[0].checked})
+  }
+
+  const result = await apiRequest(reqURL, updateOptions)
+  
+  if (result) setFetchError(result) 
 }
 
 const handleDelete = (id) => {
@@ -48,7 +64,6 @@ const handleDelete = (id) => {
 
 const handleSubmit = (e) => {
   e.preventDefault()
-  console.log(newItem)
   addItem(newItem)
   setNewItem('')
 }
